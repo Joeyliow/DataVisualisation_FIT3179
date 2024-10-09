@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agricultural Performance Indicators by Country</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  <style>
+    body {
+      background-color: white; /* Overall page background */
+      font-family: 'Open Sans', sans-serif;
+      margin: 0; /* Remove default margin */
+      padding: 0; /* Remove default padding */
+    }
+
+    .page {
+      display: flex;
+      flex-direction: column; /* Arrange cards in a column */
+      align-items: center; /* Center align cards */
+    }
+
+    .header {
+      background-color: #d8deac; /* Light green header background */
+      padding: 20px; /* Padding for header */
+      width: 80%; /* Full width minus margins */
+      max-width: 1500px; /* Maximum width for larger screens */
+      box-shadow: -8px 10px 15px rgba(0, 0, 0, 0.3); /* Shadow effect for header */
+      margin: 20px 0; /* Margin for spacing */
+      text-align: center; /* Center text */
+      font-size: 30px; /* Larger font size for header */
+      font-weight: bold; /* Bold text */
+      text-transform: uppercase; /* Make text all caps */
+      border-radius: 10px;
+    }
+
+    .card {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 90%; /* Full width minus margin */
+      max-width: 1200px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+    }
+
+    .card1 {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 80%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 850px;
+    }
+
+    .card2 {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 80%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 550px;
+    }
+
+    .card3 {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 80%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 780px;
+    }
+
+    .card4 {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 80%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 670px;
+    }
+
+    .title-container {
+      flex: 0 0 15%; /* Fixed width for the title */
+      display: flex;
+      align-items: top; /* Center title vertically */
+      justify-content: center; /* Center title horizontally */
+      text-align: left; /* Align text to the left */
+      padding-left: 20px;
+      padding-top: 20px;
+    }
+
+    .title-container h2 {
+      font-weight: bold; /* Make the title bold */
+      color: #555555; /* Change title color to white */
+      margin: 0; /* Remove default margin */
+      font-size: 20px; /* Title font size */
+    }
+
+    .title-container1 {
+      flex: 0 0 5%; /* Fixed width for the title */
+      display: flex;
+      align-items: top; /* Center title vertically */
+      justify-content: center; /* Center title horizontally */
+      text-align: left; /* Align text to the left */
+      padding-left: 20px;
+      padding-top: 20px;
+    }
+
+    .title-container1 h2 {
+      font-weight: bold; /* Make the title bold */
+      color: #555555; /* Change title color to white */
+      margin: 0; /* Remove default margin */
+      font-size: 20px; /* Title font size */
+    }
+
+    .content-container {
+      flex: 1; /* Allow content to take remaining space */
+      display: flex;
+      flex-direction: column; /* Stack charts vertically */
+      gap: 0px; /* Space between charts */
+      padding-top: 20px;
+      justify-content: flex-start;
+    }
+
+    .text-container {
+      flex: 0 0 20%; /* Fixed height for the text area */
+      text-align: left; /* Align text to the left */
+      padding-top: 20px;
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      border-radius: 5px; /* Rounded corners */
+      padding: 10px; /* Padding inside the text container */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+      color: #555555;
+    }
+
+    .transparent-text-container {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 15px; /* Add padding for spacing */
+      margin-top: 50px; /* Space between the content and the text container */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 90%; /* Adjust width as needed */
+      color: #555555; /* Text color */
+    }
+
+    .transparent-text-container1 {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 15px; /* Add padding for spacing */
+      margin-top: 50px; /* Space between the content and the text container */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 80%; /* Adjust width as needed */
+      color: #555555; /* Text color */
+      transform: translate(-50px, 200px);
+    }
+
+    .transparent-text-container2 {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 15px; /* Add padding for spacing */
+      margin-top: 50px; /* Space between the content and the text container */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 100%; /* Adjust width as needed */
+      color: #555555; /* Text color */
+      transform: translate(-50px, 200px);
+    }
+
+    .transparent-text-container3 {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 15px; /* Add padding for spacing */
+      margin-top: 50px; /* Space between the content and the text container */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 80%; /* Adjust width as needed */
+      color: #555555; /* Text color */
+      transform: translate(50px,-40px);
+      height: 500px;
+    }
+
+    .transparent-text-container4 {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 15px; /* Add padding for spacing */
+      margin-top: 50px; /* Space between the content and the text container */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 80%; /* Adjust width as needed */
+      color: #555555; /* Text color */
+      transform: translateX(50px);
+    }
+
+    .vis-container {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+    }
+
+    .vis-container1 {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      padding-left: 40px;
+    }
+
+    .vis-container2 {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      transform: translateX(-70px);
+    }
+
+    .vis-container3 {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      transform: translateX(-70px);
+    }
+
+    .vis-container4 {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      transform: translateX(-60px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .card {
+        flex-direction: column; /* Stack cards vertically on small screens */
+      }
+
+      .title-container, .text-container {
+        flex: 1; /* Full width for small screens */
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+    <div class="header">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AGRICULTURAL PERFORMANCE BY COUNTRY
+    </div>
+
+    <div class="card1">
+      <div class="title-container">
+        <h2>Overview: Geographic and Economic Impact of Agriculture Sector</h2>
+      </div>
+      <div class="content-container">
+        <div class="vis-container1" id="vis1"></div>
+        <div class="vis-container1" id="vis2"></div>
+      </div>
+      <div class="text-container">
+        <p>Brief introduction of the topic</p>
+        <p>This is additional text relevant to the chart. It can contain insights or contextual information.</p>
+      </div>
+    </div>
+
+    <div class="card2">
+      <div class="title-container">
+        <h2>Climate and Environmental Impact on Agriculture</h2>
+      </div>
+      <div class="content-container">
+        <div class="vis-container2" id="vis3"></div>
+      
+      <div class="transparent-text-container">
+        <p>This is additional text relevant to the chart. It can contain insights or contextual information.</p>
+      </div>
+    </div>
+    </div>
+
+    <div class="card3">
+      <div class="title-container">
+        <h2>Agricultural Productivity</h2>
+      </div>
+      <div class="content-container">
+        <div class="vis-container3" id="vis4"></div>
+        <div class="transparent-text-container1">
+          <p>This is additional text relevant to the chart. It can contain insights or contextual information.</p>
+        </div>
+      </div>
+      
+      <div class="content-container">
+        <div class="vis-container4" id="vis5"></div> 
+        <div class="transparent-text-container2">
+          <p>This is additional text relevant to the chart. It can contain insights or contextual information.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card4">
+      <div class="title-container1">
+        <h2>Radar Chart</h2>
+        <h2>Analysis</h2>
+      </div>
+      <div class="content-container">
+        <div class="vis-container" id="vis6"></div>
+      </div>
+      <div class="content-container">
+        <div class="transparent-text-container3">
+          <p>This is additional text relevant to the chart. It can contain insights or contextual information.</p>
+        </div>
+        <div class="transparent-text-container4">
+          <p>Author</p>
+          <p>Source</p>
+          <p>Date</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var specVis1 = "choropleth_map.vg.json";
+    var specVis2 = "bubbleplot.vg.json";
+    var specVis3 = "small_multiples_heatmap.vg.json";
+    var specVis4 = "stackedarea_linechart.vg.json";
+    var specVis5 = "radial_plot.vg.json";
+    var specVis6 = "radar_chart.vg.json";
+
+    vegaEmbed('#vis1', specVis1, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis2', specVis2, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis3', specVis3, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis4', specVis4, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis5', specVis5, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis6', specVis6, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+  </script>
+</body>
+
+</html>

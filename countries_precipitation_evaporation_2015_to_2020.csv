@@ -1,0 +1,11 @@
+Country_Name,Country_Code,Series_Name,Series_Code,2015,2016,2017,2018,2019,2020
+Argentina,ARG,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,1.017107544,0.898745736,0.355145833,-0.147019833,-0.016506338,-1.808441905
+Australia,AUS,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,-0.680330638,0.296382143,-0.559842656,-1.091812903,-2.475008654,-0.123613171
+Brazil,BRA,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,-2.051762937,-2.031811582,-1.943984454,-1.375356917,-1.598945297,-1.704825457
+Canada,CAN,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,-0.900949817,0.093482868,-0.349467898,-0.012020626,0.38421964,0.420640067
+China,CHN,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,0.347402517,1.435484978,-0.775333387,0.128275538,-0.87480302,0.472446654
+France,FRA,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,-1.725852925,-0.702780665,-1.470185274,-0.84513922,-1.094465985,-1.27058781
+India,IND,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,-0.139608484,-0.287425087,0.175999643,-1.168407401,1.754936904,1.073866892
+Nigeria,NGA,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,-1.560883569,0.224647042,-0.448487402,0.383219575,1.272816024,0.524689294
+Russian Federation,RUS,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,0.470845429,-1.408017737,1.442056602,-1.070708874,-0.153973255,-1.241106976
+United States,USA,Standardised Precipitation-Evapotranspiration Index,EN.CLC.SPEI.XD,1.487122058,-0.090504169,0.630013596,1.901845411,2.274658493,-0.245766999
