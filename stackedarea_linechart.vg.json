@@ -1,0 +1,146 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#f0efdd",
+    "vconcat": [
+      {
+        "width": 400,
+        "height": 200,
+        "title": {
+        "text": "Different Types of Crop Production Trends Over Time",
+        "fontSize": 16,
+        "color":"#636363",
+        "offset":20
+        },
+        "data": {
+          "url": "agriculture_productivity_by_country_year.csv",
+          "format": {"type": "csv"}
+        },
+        "layer": [
+          {
+            "mark": {
+              "type": "text",
+              "fontSize": 10,
+              "align": "right",
+              "color": "black"
+            },
+            "encoding": {
+              "x": {
+                "field": "Year"
+              },
+              "y": {
+                "aggregate": "sum",
+                "field": "Crop_Yield_MT_per_HA",
+                "type": "quantitative"
+              },
+              "text": {
+                "field": "Crop_Type"
+              }
+            },
+            "transform": [
+              {
+                "filter": {
+                  "field": "Year",
+                  "equal": "2023"
+                }
+              },
+              {
+                "aggregate": [
+                  {
+                    "op": "count",
+                    "as": "Count"
+                  }
+                ],
+                "groupby": ["Crop_Type"]
+              }
+            ]
+          },
+          {
+            "mark": {"type": "area", "line": true, "point": true},
+            "encoding": {
+              "x": {
+                "field": "Year",
+                "type": "temporal",
+                "axis": {
+                  "title": "Year",
+                  "titleColor":"grey",
+                  "format": "%Y",
+                  "tickCount": 24,
+                  "titlePadding":10
+                }
+              },
+              "y": {
+                "field": "Crop_Yield_MT_per_HA",
+                "type": "quantitative",
+                "aggregate": "sum",
+                "axis":{
+                "title": "Total Crop Yield (Metric Tons per Hectare)",
+                "titleColor":"grey"
+                }
+              },
+              "color": {
+                "field": "Crop_Type",
+                "type": "nominal",
+                "scale": {"scheme": "pastel1"},
+                "legend":{"title":"Crop Type", "titleFontSize": 12,"titleColor": "#636363", "titleFontWeight":"normal","labelColor":"#636363","offset":-60}
+
+              },
+              "tooltip": [
+                {"field": "Year", "type": "temporal", "title": "Year"},
+                {"field": "Crop_Type", "type": "nominal", "title": "Crop Type"},
+                {
+                  "field": "Crop_Yield_MT_per_HA",
+                  "type": "quantitative",
+                  "title": "Crop Yield (Metric Tons per Hectare)",
+                  "aggregate": "sum"
+                }
+              ]
+            },
+            "transform": [
+              {
+                "filter": {"param": "brush"}
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "width": 500,
+        "height": 100,
+        "mark": "line",
+        "title": {
+          "text": "Yearly Crop Production Summary",
+          "fontSize": 16,
+          "color":"#636363"
+        },
+        "params": [
+          {
+            "name": "brush",
+            "select": {"type": "interval", "encodings": ["x"]}
+          }
+        ],
+        "data": {
+          "url": "agriculture_total_productivity_year.csv",
+          "format": {"type": "csv"}
+        },
+        "encoding": {
+          "x": {
+            "field": "Year",
+            "type": "temporal",
+            "axis": {
+              "title": "Year",
+              "format": "%Y",
+              "tickCount": 24,
+              "titleColor":"grey"
+            }
+          },
+          "y": {
+            "aggregate": "sum",
+            "field": "Crop_Yield_MT_per_HA",
+            "type": "quantitative",
+            "axis": {"title":["Total Crop Yield", "(Metric Tons per Hectare)"],"titleColor":"grey"}
+          },
+          "color":{"value":"grey"}
+        }
+      }
+    ]
+  }
