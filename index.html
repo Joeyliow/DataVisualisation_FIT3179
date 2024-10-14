@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agricultural Performance Indicators by Country</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  <style>
+    body {
+      background-color: white; /* Overall page background */
+      font-family: 'Open Sans', sans-serif;
+      margin: 0; /* Remove default margin */
+      padding: 0; /* Remove default padding */
+    }
+
+    .page {
+      display: flex;
+      flex-direction: column; /* Arrange cards in a column */
+      align-items: center; /*Center align cards*/
+    }
+
+    .header {
+      background-color: #d8deac; /* Light green header background */
+      padding: 20px; /* Padding for header */
+      width: 70%; /* Full width minus margins */
+      max-width: 1200px; /* Maximum width for larger screens */
+      box-shadow: -8px 10px 15px rgba(0, 0, 0, 0.3); /* Shadow effect for header */
+      margin: 20px 0; /* Margin for spacing */
+      text-align: center; /* Center text */
+      font-size: 30px; /* Larger font size for header */
+      font-weight: bold; /* Bold text */
+      text-transform: uppercase; /* Make text all caps */
+      border-radius: 10px;
+      font-family: 'Merriweather', serif;
+    }
+
+    .card_map {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 70%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 350px;
+    }
+
+    .card_bubble {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 70%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 370px;
+      margin-bottom: 20px;
+    }
+
+    .card_heatmap {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 70%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 630px;
+      margin-bottom: 20px;
+    }
+
+    .card_stackedarea {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 70%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 450px;
+    }
+
+    .card_polararea {
+      background-color: #f0efdd; /* Card background (light beige) */
+      border-radius: 5px; /* Rounded corners */
+      margin: 10px; /* Margin between cards */
+      padding: 20px; /* Padding inside the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for cards */
+      width: 70%; /* Full width minus margin */
+      max-width: 1500px; /* Maximum width for larger screens */
+      display: flex; /* Use flexbox for card layout */
+      height: 450px;
+    }
+
+    .left-aligned-title {
+      font-size: 21px;
+      color: #555555;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      padding-left:230px;
+      align-self: flex-start;
+      font-weight: bold;
+      font-family: 'Times New Roman', serif;
+    }
+
+    .content-container-row {
+      flex: 1; /* Allow content to take remaining space */
+      display: flex;
+      flex-direction: row; /* Stack charts vertically */
+      gap: 0px; /* Space between charts */
+      padding-top: 20px;
+      justify-content: flex-start;
+    }
+
+    .content-container-column {
+      flex: 1; /* Allow content to take remaining space */
+      display: flex;
+      flex-direction: column; /* Stack charts vertically */
+      gap: 0px; /* Space between charts */
+      padding-top: 20px;
+      justify-content: flex-start;
+    }
+
+    .text-container_map {
+      text-align: left; /* Align text to the left */
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      border-radius: 5px; /* Rounded corners */
+      padding: 5px 10px; /* Less padding on top/bottom, more on sides */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+      color: #555555;
+      width: 330px;
+      height: 290px;
+      font-size: 15px;
+      transform: translateX(-20px);
+    }
+
+    .text-container-bubble {
+      text-align: left; /* Align text to the left */
+      padding: 5px 10px; /* Less padding on top/bottom, more on sides */
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+      color: #555555;
+      width: 330px;
+      height: 310px;
+      font-size:15px;
+      transform: translate(50px,20px);
+    }
+
+    .text-container-smallmultiple1 {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      margin-top: 5px; /* Space between the content and the text container */
+      padding: 5px 10px; /* Less padding on top/bottom, more on sides */
+      margin-right: 80px;
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 270px; /* Adjust width as needed */
+      color: #555555; /* Text color */
+      transform: translate(20px,-50px);
+      height:230px;
+      font-size:15px;
+
+    }
+
+    .text-container-smallmultiple2 {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      margin-top: 5px; /* Space between the content and the text container */
+      margin-right: 80px;
+      padding: 5px 10px; /* Less padding on top/bottom, more on sides */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 270px; /* Adjust width as needed */
+      color: #555555; /* Text color */
+      transform: translate(20px,-50px);
+      height:230px;
+      font-size:15px;
+
+    }
+
+    .text-container-smallmultiple3 {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 5px 10px; /* Less padding on top/bottom, more on sides */
+      margin-top: 5px; /* Space between the content and the text container */
+      margin-right: 80px;
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 270px; /* Adjust width as needed */
+      color: #555555; /* Text color */
+      transform: translate(10px,-50px);
+      height:230px;
+      font-size:15px;
+
+    }
+
+    .text-container-stackedarea {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 5px 10px; /* Less padding on top/bottom, more on sides */
+      margin-top: 50px; /* Space between the content and the text container */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 330px; /* Adjust width as needed */
+      height:380px;
+      color: #555555; /* Text color */
+      font-size:15px;
+      transform: translate(10px,-20px);
+    }
+
+    .text-container-polararea {
+      background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+      padding: 5px 10px; /* Less padding on top/bottom, more on sides */
+      margin-top: 50px; /* Space between the content and the text container */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      text-align: left; /* Align text to the left */
+      width: 330px; /* Adjust width as needed */
+      height: 330px;
+      font-size:15px;
+      color: #555555; /* Text color */
+      transform: translate(160px,-30px);
+    }
+
+    .vis-container-map {
+      height: 800px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      padding-left: 0px;
+      transform: translate(0px,-20px);
+    }
+
+    .vis-container-bubble {
+      height: 800px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      padding-left: 0px;
+      transform: translate(40px,-20px);
+    }
+
+    .vis-container-heatmap {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      transform: translate(-15px,-20px);
+    }
+
+    .vis-container-stackedarea {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      transform: translateY(-20px);
+    }
+
+    .vis-container-polararea {
+      height: 400px; /* Fixed height for visualizations */
+      padding: 10px; /* Add padding */
+      transform: translate(50px,-20px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .card {
+        flex-direction: column; /* Stack cards vertically on small screens */
+      }
+
+      .title-container, .text-container {
+        flex: 1; /* Full width for small screens */
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+    <div class="header">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Global Agricultural Insights
+    </div>
+
+    <h2 class="left-aligned-title">
+      Overview: Geographic Spread and Economic Influence of Agriculture
+    </h2>
+
+    <div class="card_map">
+      <div class="content-container-row">
+        <div class="vis-container-map" id="vis1"></div>
+        <div class="text-container_map">
+          <p>Agriculture remains a crucial component of the global economy, especially in regions where it significantly contributes to GDP.</p>
+          <p>In nations like <strong>Nigeria</strong> and <strong>India</strong>, agriculture constitutes a substantial part of the economy. <strong>Nigeria</strong>, with the highest contribution, often surpasses <strong>15%</strong> of its GDP, while <strong>India</strong> also shows strong agricultural contributions, though slightly lower.</p>
+          <p>Conversely, in more industrialized nations, the agricultural share of GDP is relatively lower, reflecting a shift towards diversified economies with advanced industrial and service sectors.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card_bubble">
+      <div class="content-container-row">
+        <div class="vis-container-bubble" id="vis2"></div>
+        <div class="text-container-bubble">
+          <p>In <span style="color: #8da0cb;">Africa</span> and <span style="color: #a65628;">Asia</span>, agriculture employs a large workforce but contributes less to GDP, reflecting labor-intensive farming.</p>
+          <p><span style="color: #fc8d62;">Europe</span> has minimal agricultural impact, indicative of its focus on industry and services.</p>
+          <p><span style="color: #66c2a5;">Oceania</span> balances modern agriculture with a strong export focus, particularly in Australia and New Zealand.</p>
+          <p><span style="color: #a6cee3;">North America</span> uses tech-driven agriculture, achieving moderate GDP impact with fewer workers, while <span style="color: #ffd966;">South America</span> combines traditional farming with increasing global influence.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <h2 class="left-aligned-title">
+      Key Environmental Factors Affecting Agriculture
+    </h2>
+
+    <div class="card_heatmap">
+      <div class="content-container-column">
+        <div class="vis-container-heatmap" id="vis3"></div>
+        
+        <div class="content-container-row">
+          <div class="text-container-smallmultiple1">
+            <p>Countries with <span style="color: #066a6a;">higher Carbon Dioxide emissions </span>such as <b>Australia</b>, <b>Canada</b> and <b>United States</b> often face challenges balancing industrial growth with sustainable agriculture. Elevated CO₂ levels can lead to climate changes that impact crop yield, soil health, and water resources, essential factors in agricultural productivity.</p>
+          </div>
+          <div class="text-container-smallmultiple2">
+            <p> <span style="color: #9f3732;">Rising temperatures</span> can shift growing seasons, increase heat stress, and strain water resources, all of which can affect agricultural output. In regions like <b>Nigeria</b> and <b>India</b>, where temperatures are relatively high, these challenges are particularly evident. However, both countries have adapted by cultivating crops resilient to heat to support their strong agricultural contributions to their economy despite the warmer climate. </p>
+          </div>
+          <div class="text-container-smallmultiple3">
+            <p>The <span style="color:#0b4f95">standard precipitation-evapotranspiration index</span> reveals water availability for agriculture, where <b>positive</b> values indicate <b>more precipitation than evaporation</b>, which supports crop growth, while <b>negative</b> values suggest <b>potential drought conditions</b>. All countries show fluctuations over time, reflecting variability in water resources that could impact agricultural consistency.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="left-aligned-title">
+      Trends in Agricultural Productivity
+    </h2>
+
+    <div class="card_stackedarea">
+      <div class="content-container-row">
+        <div class="vis-container-stackedarea" id="vis4"></div>
+        <div class="text-container-stackedarea">
+          <p>Crop yields have experienced notable fluctuations over time, with peaks typically occurring every few years. This cyclical pattern suggests that crop production may be influenced by seasonal factors, climate conditions, or market cycles. Notably, certain crops, such as <span style="background-color: #bbd4ce;">Wheat</span> and <span style="background-color: #e4f6f5;">Rice</span>, consistently make up a substantial portion of the overall yield.</p>
+          <p>Despite these fluctuations, the overall yield trend displays a degree of stability. Occasional sharp declines appear to coincide with dips in total yield, potentially indicating the influence of adverse weather events or shifts in cultivation practices. The diversity of crops contributes to this stability, as the varied types—such as <span style="background-color: #3a9efd;">Cotton</span>, <span style="background-color:#ffca7a;">Coffee</span>, <span style="background-color: #f9b4ab;">Corn</span> and <span style="background-color: #dad874;">Vegetables</span> provide resilience by buffering against large-scale yield reductions, supporting a balanced agricultural landscape even amid yearly variations.</p>
+        </div>
+      </div>
+    </div>
+      
+    <div class="card_polararea">
+      <div class="content-container-row">
+        <div class="vis-container-polararea" id="vis5"></div> 
+        <div class="text-container-polararea">
+          <p>Crop production varies significantly across countries, with certain regions dominating specific types of crops. For example, <b>Nigeria</b> is a leading producer of <span style="background-color: #e4f6f5;">Rice</span>, while <b>France</b> takes the lead in <span style="background-color: #bbd4ce;">Wheat</span> production. Other crops such as <span style="background-color: #264e70; color:white">barley</span>, <span style="background-color: #ffca7a">coffee</span>, <span style="background-color: #f9b4ab">corn</span>, <span style="background-color: #3a9efd">cotton</span>, <span style="background-color: #96adbe">soybeans</span>, <span style="background-color: #fdebd3">sugarcane</span>, <span style="background-color: #dad874">vegetables</span> and <span style="background-color: #679186">fruits</span> are spread across diverse countries, each with varying levels of contribution. This distribution underscores the importance of regional specializations and local agricultural conditions, which play a critical role in shaping global yield trends. </p>
+          <p>The presence of a variety of crop types highlights the diversity in global agriculture, ensuring stability in overall yields despite fluctuations in specific areas.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align: center; font-size: small; color: grey; margin-top: 60px;">
+      Joey Liow Pei Xing&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Oct 2024
+    </p>    
+
+    <div style="text-align: center; color: lightgrey; font-size: small; margin-bottom: 50px;">
+      <table style="margin: auto; border-collapse: collapse;">
+          <tr>
+              <td>Data sources: </td>
+              <td>
+                  Wikipedia&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                  <a href="https://en.wikipedia.org/wiki/List_of_countries_by_GDP_sector_composition#Nominal_GDP_sector_composition_(October_2023)" style="color: lightgrey;">List of countries by GDP sector composition (2024)</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;September 2024
+              </td>
+          </tr>
+          <tr>
+              <td></td>
+              <td>
+                  Waqar Ali&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                  <a href="https://www.kaggle.com/datasets/waqi786/climate-change-impact-on-agriculture" style="color: lightgrey;">🌍 climate change impact on agriculture 🌱</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;September 2024
+              </td>
+          </tr>
+          <tr>
+              <td></td>
+              <td>
+                  Our World in Data&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                  <a href="https://ourworldindata.org/grapher/continents-according-to-our-world-in-data" style="color: lightgrey;">World regions according to Our World in Data</a>
+              </td>
+          </tr>
+          <tr>
+              <td></td>
+              <td>
+                  World Bank Group&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                  <a href="https://databank.worldbank.org/source/world-development-indicators#" style="color: lightgrey;">World development indicators</a>
+              </td>
+          </tr>
+      </table>
+  </div>
+
+
+  </div>
+
+  <script type="text/javascript">
+    var specVis1 = "choropleth_map.vg.json";
+    var specVis2 = "bubbleplot.vg.json";
+    var specVis3 = "small_multiples_heatmap.vg.json";
+    var specVis4 = "stackedarea_linechart.vg.json";
+    var specVis5 = "radial_plot.vg.json";
+    var specVis6 = "radar_chart.vg.json";
+
+    vegaEmbed('#vis1', specVis1, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis2', specVis2, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis3', specVis3, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis4', specVis4, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis5', specVis5, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+
+    vegaEmbed('#vis6', specVis6, { "actions": false }).then(function (result) {
+      // Access the Vega view instance
+    }).catch(console.error);
+  </script>
+</body>
+
+</html>

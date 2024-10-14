@@ -1,0 +1,123 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#f0efdd",
+    "height": 300,
+    "width":500,
+    "title": {
+        "text": "Annual Crop Yields by Type and Country",
+        "fontSize": 16,
+        "color":"#636363"      
+      },
+    "data": {
+      "url": "agriculture_productivity_by_country_year.csv",
+      "format": {"type": "csv"}
+    },
+    "params": [
+      {
+        "name": "Crop_Type_Selection",
+        "value": "Wheat",
+        "bind": {
+          "input": "select",
+          "options": [
+            "Wheat", "Corn", "Rice", "Soybeans", "Sugarcane", "Barley", "Fruits", "Coffee", "Cotton", "Vegetables"
+          ],
+          "name": "Crop Type: "
+        }
+      },
+      {
+        "name": "Year_Selection",
+        "value": 2023,
+        "bind": {
+          "input": "select",
+          "options": [
+            1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+            2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+          ],
+          "name": "Year: "
+        }
+      }
+    ],
+    "transform": [
+      {
+        "filter": "datum.Crop_Type == Crop_Type_Selection && datum.Year == Year_Selection"
+      },
+      {
+        "window": [
+          {
+            "op": "rank",
+            "as": "rank"
+          }
+        ],
+        "sort": [
+          {
+            "field": "Crop_Yield_MT_per_HA",
+            "order": "descending"
+          }
+        ]
+      }
+    ],
+    "layer": [
+      {
+        "mark": {"type": "arc", "innerRadius": 20, "stroke": "#fff"}
+      },
+      {
+        "mark": {
+          "type": "text",
+          "radiusOffset": 40,
+          "fontSize": 12,    
+          "align": "center",
+          "fontWeight":"bold"    
+        },
+        "encoding": {
+          "text": {"field": "Country", "type": "nominal"}  
+        }
+      }
+    ],
+    "encoding": {
+      "theta": {
+        "field": "Crop_Yield_MT_per_HA",
+        "type": "quantitative",
+        "stack": true
+      },
+      "radius": {
+        "field": "Crop_Yield_MT_per_HA",
+        "scale": {"type": "sqrt", "zero": true, "rangeMin": 20}
+      },
+      "color": {
+        "field": "Country",
+        "type": "nominal",
+        "scale": {"range": [
+          "#66c2a5",  
+          "#fc8d62",  
+          "#8da0cb", 
+          "#e78ac3",  
+          "#a6d854", 
+          "#ffd92f",  
+          "#e5c494",  
+          "#b3b3b3",  
+          "#fdb462", 
+          "#bc80bd"   
+        ]},
+        "legend":null      
+      },
+      "tooltip": [  
+        {"field": "Country", "type": "nominal", "title": "Country"},
+        {"field": "Crop_Type", "type":"nominal","title":"Crop Type"},
+        {"field": "Crop_Yield_MT_per_HA", "type": "quantitative", "title": "Crop Yield (Metric Tons per Hectare)"},
+        {"field": "Year", "type":"ordinal", "title":"Year"}
+      ]
+    },
+    "config": {
+      "view": {
+        "stroke": "transparent",  
+        "continuousWidth": 300,   
+        "continuousHeight": 300,  
+        "padding": {"left": 40, "right": 40, "top": 20, "bottom": 0}  
+      },
+      "title": {"font": "sans-serif", "fontSize": 13},
+      "autosize": {
+        "type": "pad",            
+        "contains": "padding"
+      }
+    }
+  }

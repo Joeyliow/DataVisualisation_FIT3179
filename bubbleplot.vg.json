@@ -1,0 +1,157 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#f0efdd",
+    "title": {
+      "text": "Impact of Agriculture Employment in Economic Contribution (2021)",
+      "fontSize": 16,
+      "color":"#636363",
+      "offset":20
+    },
+    "width": 400,
+    "height": 250,
+    "padding": {
+      "top": 0,
+      "right": 20,
+      "bottom": 10,
+      "left": 0
+    },
+    "data": {
+      "url": "Processed_Bubbleplot_Dataset.csv"
+    },
+    "params": [
+      {
+        "name": "Land_Size",
+        "value": 0,
+        "bind": {
+          "input": "range",
+          "min": 0,
+          "max": 6000000,
+          "step": 100000,
+          "name": "Minimum Land Size Area (per Square Kilometers): ",
+          "style": {"margin-left":"50px"}
+        }
+      }
+    ],
+    "transform": [
+      {
+        "filter": "datum['Agricultural_land(sq_km)'] > Land_Size"
+      }
+    ],
+    "encoding": {
+      "x": {
+        "field": "Employment_agriculture(%_total_employment)",
+        "type": "quantitative",
+        "title": "Agriculture Employment Rate (%)",
+        "axis": {"tickCount": 10, "titleColor":"grey"},
+        "scale": {"type": "linear", "domain": [0, 90]}
+      },
+      "y": {
+        "field": "Agriculture_forestry_fishing_value(%_GDP)",
+        "type": "quantitative",
+        "title": ["Agriculture, Forestry & Fishing Contribution ","to GDP (%)"],
+        "axis": {"tickCount": 10, "titlePadding": 10, "titleColor":"grey"},
+        "scale": {"type": "linear", "domain": [0, 60]}
+      }
+    },
+    "layer": [
+      {
+        "selection": {
+          "continent_highlight": {
+            "type": "multi",
+            "fields": ["Continent"],
+            "bind": "legend"
+          },
+          "grid": {
+            "type": "interval",
+            "bind": "scales"
+            },
+          "highlight": {
+            "type": "point",
+            "on": "mouseover",
+            "clear": "mouseout"
+            }
+        },
+        "mark": "circle",
+        "encoding": {
+          "color": {
+            "field": "Continent",
+            "type": "nominal",
+            "scale": {
+              "domain": [
+                "North America",
+                "South America",
+                "Europe",
+                "Africa",
+                "Asia",
+                "Oceania"
+              ],
+              "range": [
+                  "#a6cee3",  
+                  "#ffd966",  
+                  "#fc8d62", 
+                  "#8da0cb",  
+                  "#a65628",  
+                  "#66c2a5"   
+              ]
+            },
+            "legend":{"title":"Continent", "titleFontSize": 12,"titleColor": "#636363", "titleFontWeight":"normal","labelColor":"#636363","offset":50}
+          },
+          "opacity": {
+            "condition": {"selection": "continent_highlight", "value": 0.6},
+            "value": 0.1
+          },
+          "size": {
+            "field": "Agricultural_land(sq_km)",
+            "type": "quantitative",
+            "scale": {
+              "type": "threshold",
+              "domain": [10, 1000, 10000, 100000, 1000000, 5000000],
+              "range": [10, 50, 100, 200, 300, 400,600]
+            },
+            "legend":{"title":["Agricultural Land Area", "(Square Kilometers)"], "format": ".1s", "titleFontSize": 11,"titleColor": "#636363", "titleFontWeight":"normal","labelColor":"#636363", "offset":50}
+          },
+          "tooltip": [
+            {"field": "Continent", "type": "nominal", "title": "Continent"},
+            {"field": "Country_Name", "type": "nominal", "title": "Country"},
+            {"field": "Employment_agriculture(%_total_employment)", "type": "quantitative", "format": "0.2f", "title": "Agricultural Employment as a Percentage of Total Workforce (%)"},
+            {"field": "Agriculture_forestry_fishing_value(%_GDP)", "type": "quantitative", "format": "0.2f", "title": "Economic Contribution of Agriculture, Forestry, and Fishing to GDP (%)"},
+            {"field": "Agricultural_land(sq_km)", "type": "quantitative", "format": ",", "title": "Total Agricultural Land Area (Square Kilometers)"}
+          ]
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "center",
+          "baseline": "middle",
+          "dx": 60,
+          "dy":10,
+          "fontStyle": "italic"
+        },
+        "encoding": {
+          "text": {
+            "condition": {
+              "test": "datum['Country_Name'] == 'China'",
+              "value": ["With over 5 million square kilometers of agricultural land,", "China possesses the largest areas dedicated to agriculture globally."]
+            },
+            "value": ""
+          },
+          "color": {"value": "black"},
+          "opacity": {
+            "condition": {
+              "test": "datum['Country_Name'] == 'China'",
+              "value": 1
+            },
+            "value": 0
+          },
+          "tooltip": [
+            {"field": "Continent", "type": "nominal", "title": "Continent"},
+            {"field": "Country_Name", "type": "nominal", "title": "Country"},
+            {"field": "Employment_agriculture(%_total_employment)", "type": "quantitative", "format": "0.2f", "title": "Agricultural Employment as a Percentage of Total Workforce (%)"},
+            {"field": "Agriculture_forestry_fishing_value(%_GDP)", "type": "quantitative", "format": "0.2f", "title": "Economic Contribution of Agriculture, Forestry, and Fishing to GDP (%)"},
+            {"field": "Agricultural_land(sq_km)", "type": "quantitative", "format": ",", "title": "Total Agricultural Land Area in Square Kilometers"}
+          ]
+        }
+      }
+    ]
+  }

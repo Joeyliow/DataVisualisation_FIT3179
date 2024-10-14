@@ -1,0 +1,247 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#f0efdd",
+  "title": {
+    "text": "Global Agricultural Economic Contribution by Country (2023)",
+    "fontSize": 16,
+    "color":"#636363"
+  },
+  "width": 500,
+  "height": 300,
+  "padding": {
+    "top": 0,
+    "right": 50,
+    "bottom": 10,
+    "left": 50
+  },
+  "data": {
+    "url": "ne_110m_admin_0_countries.topojson",
+    "format": {
+      "type": "topojson",
+      "feature": "ne_110m_admin_0_countries"
+    }
+  },
+  "projection": {
+    "type": "equalEarth"
+  },
+  "view":{
+    "stroke": "transparent"
+  },
+  "layer": [
+    {
+      "transform": [
+        {
+          "calculate": "'Data is not available in ' + datum.properties.NAME",
+          "as": "note"
+        }
+      ],
+      "selection": {
+        "country_select": {
+          "type": "single",
+          "fields": ["properties.NAME"],
+          "bind": {
+            "input": "select",
+            "options": [
+              null,
+              "United States of America",
+              "China",
+              "Japan",
+              "Germany",
+              "India",
+              "United Kingdom",
+              "France",
+              "Italy",
+              "Brazil",
+              "Canada",
+              "Russia",
+              "Mexico",
+              "South Korea",
+              "Australia",
+              "Spain",
+              "Indonesia",
+              "Turkey",
+              "Netherlands",
+              "Saudi Arabia",
+              "Switzerland",
+              "Poland",
+              "Taiwan",
+              "Belgium",
+              "Argentina",
+              "Sweden",
+              "United Arab Emirates",
+              "Nigeria",
+              "Iran",
+              "Colombia",
+              "Thailand",
+              "Austria",
+              "Norway",
+              "Denmark",
+              "South Africa",
+              "Greece",
+              "Venezuela"
+            ],
+            "labels": [
+              "Show All",
+              "United States of America",
+              "China",
+              "Japan",
+              "Germany",
+              "India",
+              "United Kingdom",
+              "France",
+              "Italy",
+              "Brazil",
+              "Canada",
+              "Russia",
+              "Mexico",
+              "South Korea",
+              "Australia",
+              "Spain",
+              "Indonesia",
+              "Turkey",
+              "Netherlands",
+              "Saudi Arabia",
+              "Switzerland",
+              "Poland",
+              "Taiwan",
+              "Belgium",
+              "Argentina",
+              "Sweden",
+              "United Arab Emirates",
+              "Nigeria",
+              "Iran",
+              "Colombia",
+              "Thailand",
+              "Austria",
+              "Norway",
+              "Denmark",
+              "South Africa",
+              "Greece",
+              "Venezuela"
+            ],
+            "name": "Country: "
+          }
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "lightgray",
+        "stroke": "white"
+      },
+      "encoding": {
+        "tooltip": {
+          "field": "note"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 0.5
+      },
+      "transform": [
+        {
+          "lookup": "properties.NAME",
+          "from": {
+            "data": {
+              "url": "Processed_ChoroplethMap_Dataset.csv"
+            },
+            "key": "Country/Economy",
+            "fields": [
+              "Agricultural (%)"
+            ]
+          }
+        }
+      ],
+      "encoding": {
+        "color": {
+          "condition": {
+            "selection": "country_select",
+            "field": "Agricultural (%)",
+            "type": "quantitative",
+            "scale": {
+              "type": "threshold",
+              "domain": [5, 10, 15],
+              "range": [
+                "#a1d99b",
+                "#78c679",
+                "#31a354",
+                "#006837"
+              ]
+            },
+            "legend":{"title":["Agricultural","Contribution (%)"], "titleFontSize": 12,"titleColor": "#636363", "titleFontWeight":"normal","labelColor":"#636363"}
+          },
+          "value": "lightgray"
+        },
+        "tooltip": [
+          {
+            "field": "properties.NAME",
+            "type": "nominal",
+            "title": "Country"
+          },
+          {
+            "field": "Agricultural (%)",
+            "type": "quantitative",
+            "title": "Agricultural Contribution To Overall Country Gross Domestic Production (%)",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "oceans.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "oceans"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "lightblue"
+      }
+    },
+    {
+      "data": {
+        "url": "WorldMapWithGraticules.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_110m_graticules_30"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "lightgray"
+      }
+    },
+    {
+      "data": {
+        "url": "Processed_ChoroplethMap_Dataset.csv",
+        "format": { "type": "csv" }
+      },
+      "transform": [
+        {
+          "filter": {
+            "and": [
+              { "field": "Country/Economy", "equal": "Nigeria" }
+            ]
+          }
+        }
+      ],
+      "mark": {
+        "type":"text",
+      "fontStyle":"Italic"}
+      ,
+      "encoding": {
+        "text": {
+          "value": ["Nigeria's Agriculture Sector in Economic Contribution", "is the highest with 17.8%"]
+        },
+        "color": {
+          "value": "black"
+        }
+      }
+    }
+  ]
+}
